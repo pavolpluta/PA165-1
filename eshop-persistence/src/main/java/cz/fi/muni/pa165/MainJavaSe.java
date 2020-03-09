@@ -37,11 +37,23 @@ public class MainJavaSe {
 
 	private static void task04() {
 		// TODO under this line, persist two categories (class Category), one with name
-		// Electronics and second with name Musical
-		// You must first obtain the Entity manager
-		// Then you have to start transaction using getTransaction().begin()
-		// Then use persist() to persist both of the categories and finally commit the transaction
+		// 	Electronics and second with name Musical
+		// 	You must first obtain the Entity manager
+		// 	Then you have to start transaction using getTransaction().begin()
+		// 	Then use persist() to persist both of the categories and finally commit the transaction
 
+		EntityManager session = emf.createEntityManager();
+		Category electronics = new Category();
+		electronics.setName("Electronics");
+
+		Category musical = new Category();
+		musical.setName("Musical");
+
+		session.getTransaction().begin();
+		session.persist(electronics);
+		session.persist(musical);
+		session.getTransaction().commit();
+		session.close();
 		// The code below is just testing code. Do not modify it
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -71,8 +83,12 @@ public class MainJavaSe {
 		em.close();
 
 		// TODO under this line. create new entity manager and start new transaction. Merge
-		// the detached category
-		// into the context and change the name to "Electro"
+		//  the detached category
+		//  into the context and change the name to "Electro"
+		EntityManager session = emf.createEntityManager();
+		session.getTransaction().begin();
+
+
 
 		// The code below is just testing code. Do not modify it
 		EntityManager checkingEm = emf.createEntityManager();
