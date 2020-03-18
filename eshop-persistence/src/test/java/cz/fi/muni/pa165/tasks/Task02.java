@@ -24,7 +24,67 @@ public class Task02 extends AbstractTestNGSpringContextTests {
 	@PersistenceUnit
 	private EntityManagerFactory emf;
 
-	
+	@BeforeClass
+	public void setup(){
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		Category electro = new Category();
+		electro.setName("Electro");
+		Category kitchen = new Category();
+		kitchen.setName("Kitchen");
+
+		Product flashlight = new Product();
+		flashlight.setName("Flashlight");
+		Product robot = new Product();
+		robot.setName("Kitchen robot");
+		Product plate = new Product();
+		plate.setName("Plate");
+
+		em.persist(flashlight);
+		em.persist(robot);
+		em.persist(plate);
+		em.persist(electro);
+		em.persist(kitchen);
+
+		electro.addProduct(flashlight);
+		electro.addProduct(robot);
+		kitchen.addProduct(robot);
+		kitchen.addProduct(plate);
+
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	@Test
+	public void electroTest() {
+		EntityManager em = emf.createEntityManager();
+		Category electro = em.find(Category.class,1L);
+		assertContainsProductWithName(electro.getProducts(),"Kitchen robot");
+	}
+
+	@Test
+	public void kitchenTest() {
+
+		EntityManager em = emf.createEntityManager();
+		Category kitchen = em.find(Category.class,2L);
+		assertContainsProductWithName(kitchen.getProducts(),"Kitchen robot");
+		assertContainsProductWithName(kitchen.getProducts(),"plate");
+	}
+
+	@Test
+	public void flashlightTest() {
+		EntityManager em = emf.createEntityManager();
+		Product flashlight = em.find(Product.class,1L);
+		assertContainsCategoryWithName(flashlight.getCategories(),"Electro");
+	}
+
+	@Test
+	public void plate() {
+		EntityManager em = emf.createEntityManager();
+		Product plate = em.find(Product.class,3L);
+		assertContainsCategoryWithName(plate.getCategories(),"Kitchen");
+	}
+
 	private void assertContainsCategoryWithName(Set<Category> categories,
 			String expectedCategoryName) {
 		for(Category cat: categories){
