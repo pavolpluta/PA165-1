@@ -40,8 +40,9 @@ public class Product {
 	private byte[] image;
 
 	private String imageMimeType;
-	
 
+	@NotNull
+	@Column(nullable=false,unique=true)
 	private String name;
 	
 	/*

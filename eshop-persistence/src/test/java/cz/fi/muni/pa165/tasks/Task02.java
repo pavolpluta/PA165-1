@@ -91,19 +91,28 @@ public class Task02 extends AbstractTestNGSpringContextTests {
 			if (cat.getName().equals(expectedCategoryName))
 				return;
 		}
-			
+
 		Assert.fail("Couldn't find category "+ expectedCategoryName+ " in collection "+categories);
 	}
 	private void assertContainsProductWithName(Set<Product> products,
 			String expectedProductName) {
-		
+
 		for(Product prod: products){
 			if (prod.getName().equals(expectedProductName))
 				return;
 		}
-			
+
 		Assert.fail("Couldn't find product "+ expectedProductName+ " in collection "+products);
 	}
 
+	@Test(expectedExceptions = ConstraintViolationException.class)
+	public void testDoesntSaveNullName() {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		Product p = new Product();
+		em.persist(p);
+		em.getTransaction().commit();
+		em.close();
+	}
 	
 }
